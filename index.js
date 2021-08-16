@@ -1,10 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
-// Слушаем 3000 порт
-const { PORT = 3000 } = process.env;
+const router = require('./routes');
 
+const { PORT = 3000 } = process.env;
 const app = express();
 
+// const corsWhiteList = [
+//   'https://olgaliubar.students.nomoredomains.monster',
+//   'http://olgaliubar.students.nomoredomains.monster',
+// ];
+
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (corsWhiteList.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     }
+//   },
+//   credentials: true,
+// };
+
+app.use(express.json())
+
+app.use(router);
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
