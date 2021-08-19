@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = require('./routes');
+const cookieParser = require('cookie-parser');
+var helmet = require('helmet');
+const limiter = require('./middlewares/limiter');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -19,8 +22,10 @@ const app = express();
 //   credentials: true,
 // };
 
+app.use(helmet());
 app.use(express.json())
-
+app.use(cookieParser());
+app.use(limiter);
 app.use(router);
 
 async function main() {
