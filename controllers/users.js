@@ -6,7 +6,6 @@ const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 const BadRequestError = require('../errors/bad-request-err');
 
-
 module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
   bcrypt
@@ -44,7 +43,6 @@ module.exports.login = (req, res, next) => {
     })
     .catch(next);
 };
-
 
 module.exports.getUserInfo = (req, res, next) => {
   console.log(req.user);
@@ -87,5 +85,5 @@ module.exports.updateProfile = (req, res, next) => {
 
 module.exports.logout = (req, res) => {
   res.clearCookie('jwt')
-  .send({ message: "logged out" });
+    .send({ message: 'logged out' });
 };

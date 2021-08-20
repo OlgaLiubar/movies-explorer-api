@@ -1,6 +1,6 @@
 const express = require('express');
-const { celebrate, Joi } = require('celebrate');
-const { updateProfile, getUserInfo, } = require('../controllers/users');
+// const { celebrate, Joi } = require('celebrate');
+const { updateProfile, getUserInfo } = require('../controllers/users');
 // const urlValidation = require('../middlewares/validation');
 
 const usersRoutes = express.Router();
@@ -18,6 +18,5 @@ usersRoutes.patch(
   // }),
   updateProfile,
 );
-
 
 exports.usersRoutes = usersRoutes;
