@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
+const { errors } = require('celebrate');
 const limiter = require('./middlewares/limiter');
 const router = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -32,10 +33,11 @@ app.use(router);
 app.use(errorLogger);
 app.use(requestLogger);
 
+app.use(errors());
 app.use(handleErrors);
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+  await mongoose.connect('mongodb://localhost:27017/moviesdb', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
