@@ -1,7 +1,7 @@
-const MOVIE_SCH_MSG = {
-  INVALID_URL: 'Неправильный формат ссылки',
-};
+const INVALID_URL_MSG = 'Неправильный формат ссылки';
+const INVALID_EMAIL_MSG = 'Неправильный формат адреса электронной почты';
 
 module.exports = {
-  MOVIE_SCH_MSG,
+  INVALID_URL_MSG,
+  INVALID_EMAIL_MSG,
 };
