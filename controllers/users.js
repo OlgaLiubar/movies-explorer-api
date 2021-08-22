@@ -5,6 +5,7 @@ const { User } = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 const BadRequestError = require('../errors/bad-request-err');
+const { ERROR_MSG, LOGGED_IN_MSG, LOGGED_OUT_MSG } = require('../utils/constants');
 
 module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
@@ -14,12 +15,10 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.send({ name, email, _id: user._id }))
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
-        next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
+        next(new ConflictError(ERROR_MSG.CONFLICT_EMAIL));
       } else if (err.name === 'ValidationError') {
         next(
-          new BadRequestError(
-            'Переданы некорректные данные при создании пользователя.',
-          ),
+          new BadRequestError(ERROR_MSG.BAD_REQUEST),
         );
       }
       return next(err);
@@ -32,31 +31,28 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' });
-      // console.log(token);
       return res
         .cookie('jwt', token, {
-        // token - наш JWT токен, который мы отправляем
           maxAge: 3600000,
           httpOnly: true,
         })
-        .send({ message: 'Авторизация прошла успешно.' });
+        .send({ message: LOGGED_IN_MSG });
     })
     .catch(next);
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  // console.log(req.user);
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден.');
+        throw new NotFoundError(ERROR_MSG.NOT_FOUND_USER);
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(
-          new BadRequestError('Переданы некорректные данные.'),
+          new BadRequestError(ERROR_MSG.BAD_REQUEST),
         );
       }
       return next(err);
@@ -69,14 +65,14 @@ module.exports.updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден.');
+        throw new NotFoundError(ERROR_MSG.NOT_FOUND_USER);
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(
-          new BadRequestError('Переданы некорректные данные при обновлении профиля.'),
+          new BadRequestError(ERROR_MSG.BAD_REQUEST),
         );
       }
       return next(err);
@@ -85,5 +81,5 @@ module.exports.updateProfile = (req, res, next) => {
 
 module.exports.logout = (req, res) => {
   res.clearCookie('jwt')
-    .send({ message: 'logged out' });
+    .send({ message: LOGGED_OUT_MSG });
 };
