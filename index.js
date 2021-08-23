@@ -8,7 +8,8 @@ const router = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const handleErrors = require('./errors/handleErrors');
 
-const { PORT = 3000 } = process.env;
+const { PORT, MONGO_URL } = require('./config');
+
 const app = express();
 
 // const corsWhiteList = [
@@ -37,7 +38,7 @@ app.use(errors());
 app.use(handleErrors);
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/moviesdb', {
+  await mongoose.connect(MONGO_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
