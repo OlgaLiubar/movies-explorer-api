@@ -12,13 +12,13 @@ const { PORT, MONGO_URL } = require('./config');
 
 const app = express();
 
+app.use(requestLogger);
+app.use(limiter);
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-app.use(limiter);
 app.use(router);
 app.use(errorLogger);
-app.use(requestLogger);
 
 app.use(errors());
 app.use(handleErrors);

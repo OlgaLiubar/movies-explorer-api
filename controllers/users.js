@@ -1,6 +1,6 @@
-const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { NODE_ENV, JWT_SECRET } = require('../config');
 const { User } = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
@@ -47,7 +47,7 @@ module.exports.getUserInfo = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(ERROR_MSG.NOT_FOUND_USER);
       }
-      return res.send(user);
+      return res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -60,9 +60,9 @@ module.exports.getUserInfo = (req, res, next) => {
 };
 
 module.exports.updateProfile = (req, res, next) => {
-  const { name } = req.body;
+  const { name, email } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { name }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
         throw new NotFoundError(ERROR_MSG.NOT_FOUND_USER);
@@ -70,7 +70,9 @@ module.exports.updateProfile = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        next(new ConflictError(ERROR_MSG.CONFLICT_EMAIL));
+      } else if (err.name === 'ValidationError') {
         next(
           new BadRequestError(ERROR_MSG.BAD_REQUEST),
         );

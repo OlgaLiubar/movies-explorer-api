@@ -49,27 +49,26 @@ module.exports.createMovie = (req, res, next) => {
         next(
           new BadRequestError(ERROR_MSG.BAD_REQUEST),
         );
+      } else {
+        next(err);
       }
-      return next(err);
     });
 };
 
 module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.id)
+    .orFail(new NotFoundError(ERROR_MSG.NOT_FOUND_MOVIE))
     .then((movie) => {
-      if (!movie) {
-        throw new NotFoundError(ERROR_MSG.NOT_FOUND_MOVIE);
+      if (req.user._id.toString() === movie.owner.toString()) {
+        return movie.remove()
+          .then(() => res.send({ data: movie }));
       }
-      if (movie.owner.toString() !== req.user._id) {
-        throw new ForbiddenError(ERROR_MSG.FORBIDDEN);
-      } else {
-        Movie.findByIdAndRemove(req.params.id).then(() => res.send({ data: movie }));
-      }
+      throw new ForbiddenError(ERROR_MSG.FORBIDDEN);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError(ERROR_MSG.BAD_REQUEST));
       }
-      return next(err);
+      next(err);
     });
 };
