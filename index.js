@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
@@ -11,6 +12,22 @@ const handleErrors = require('./errors/handleErrors');
 const { PORT, MONGO_URL } = require('./config');
 
 const app = express();
+
+const corsWhiteList = [
+  'https://olgaliubar.students.nomoredomains.monster',
+  'http://olgaliubar.students.nomoredomains.monster',
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (corsWhiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(requestLogger);
 app.use(limiter);
