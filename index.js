@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+// const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
@@ -13,24 +13,50 @@ const { PORT, MONGO_URL } = require('./config');
 
 const app = express();
 
-const corsWhiteList = [
-  'https://olgaliubar.nomoredomains.club',
-  'http://olgaliubar.nomoredomains.club',
+// const corsWhiteList = [
+//   'https://olgaliubar.nomoredomains.club',
+//   'http://olgaliubar.nomoredomains.club',
+// ];
+
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (corsWhiteList.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     }
+//   },
+//   credentials: true,
+// };
+
+const allowedCors = [
+  "localhost:3000",
+  "https://olgaliubar.nomoredomains.club",
+  "http://https://olgaliubar.nomoredomains.club",
 ];
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (corsWhiteList.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    }
-  },
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(requestLogger);
 app.use(limiter);
+
+app.use((req, res, next) => {
+  const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
+  // проверяем, что источник запроса есть среди разрешённых
+  const { methodHttp } = req; // Сохраняем тип запроса (HTTP-метод) в соответствующую переменную
+  const requestHeaders = req.headers["access-control-request-headers"];
+  const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
+  if (allowedCors.includes(origin)) {
+    // устанавливаем заголовок, который разрешает браузеру запросы с этого источника
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+  }
+  if (methodHttp === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", DEFAULT_ALLOWED_METHODS);
+    res.header("Access-Control-Allow-Headers", requestHeaders);
+    return res.end();
+  }
+  return next();
+});
+
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
