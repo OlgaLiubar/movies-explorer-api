@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-// const cors = require('cors');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
@@ -27,13 +27,25 @@ const app = express();
 //   credentials: true,
 // };
 
-const allowedCors = [
-  "localhost:3000",
-  "https://olgaliubar.nomoredomains.club",
-  "http://https://olgaliubar.nomoredomains.club",
-];
+// const allowedCors = [
+//   "localhost:3000",
+//   "https://olgaliubar.nomoredomains.club",
+//   "http://https://olgaliubar.nomoredomains.club",
+// ];
 
-// app.use(cors(corsOptions));
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+//   "https://olgaliubar.nomoredomains.club",
+//   "http://https://olgaliubar.nomoredomains.club",
+  ],
+  methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin'],
+  credentials: true,
+};
+app.use('*', cors(corsOptions));
 
 app.use(requestLogger);
 app.use(limiter);
