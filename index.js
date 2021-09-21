@@ -1,15 +1,15 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const { errors } = require('celebrate');
-const limiter = require('./middlewares/limiter');
-const router = require('./routes');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-const handleErrors = require('./errors/handleErrors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const { errors } = require("celebrate");
+const limiter = require("./middlewares/limiter");
+const router = require("./routes");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
+const handleErrors = require("./errors/handleErrors");
 
-const { PORT, MONGO_URL } = require('./config');
+const { PORT, MONGO_URL } = require("./config");
 
 const app = express();
 
@@ -35,17 +35,17 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    'http://localhost:3000',
-//   "https://olgaliubar.nomoredomains.club",
-//   "http://https://olgaliubar.nomoredomains.club",
+    "http://localhost:3000",
+    "https://olgaliubar.nomoredomains.club",
+    "http://https://olgaliubar.nomoredomains.club",
   ],
-  methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin'],
+  allowedHeaders: ["Content-Type", "origin"],
   credentials: true,
 };
-app.use('*', cors(corsOptions));
+app.use("*", cors(corsOptions));
 
 app.use(requestLogger);
 app.use(limiter);
