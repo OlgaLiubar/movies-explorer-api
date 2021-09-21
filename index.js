@@ -14,8 +14,8 @@ const { PORT, MONGO_URL } = require('./config');
 const app = express();
 
 const corsWhiteList = [
-  'https://olgaliubar.students.nomoredomains.monster',
-  'http://olgaliubar.students.nomoredomains.monster',
+  'https://olgaliubar.nomoredomains.club',
+  'http://olgaliubar.nomoredomains.club',
 ];
 
 const corsOptions = {
