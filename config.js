@@ -4,7 +4,7 @@ const {
   NODE_ENV = 'production',
   JWT_SECRET = 'JWT_SECRET',
   MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb',
-  PORT = 3001,
+  PORT = 3005,
 } = process.env;
 
 module.exports = {

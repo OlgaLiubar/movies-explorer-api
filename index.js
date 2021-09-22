@@ -52,10 +52,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors);
-app.use('/api', router);
-// app.use(router);
-
-
+app.use(router);
 app.use(errorLogger);
 
 app.use(errors());
