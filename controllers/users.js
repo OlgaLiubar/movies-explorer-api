@@ -1,6 +1,6 @@
+const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require('../config');
 const { User } = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
@@ -30,8 +30,16 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-      res.send({ token });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        { expiresIn: '7d' });
+      // console.log(token);
+      return res
+        .cookie('jwt', token, {
+        // token - наш JWT токен, который мы отправляем
+          maxAge: 3600000,
+          httpOnly: true,
+        })
+        .send({ message: 'Авторизация прошла успешно.' });
     })
     .catch(() => {
       throw new UnauthorizedError(ERROR_MSG.UNAUTHORIZED);
