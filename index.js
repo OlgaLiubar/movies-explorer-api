@@ -55,8 +55,6 @@ app.use(cors);
 app.use(router);
 app.use('/api', require('../router'));
 
-// раздаём папку с собранным фронтендом
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(errorLogger);
 
 app.use(errors());
