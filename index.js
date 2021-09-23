@@ -15,36 +15,6 @@ const { PORT, MONGO_URL } = require("./config");
 
 const app = express();
 
-// const corsWhiteList = [
-//   'https://localhost:3000',
-//   'http://localhost:3000',
-//   'https://olgaliubar.nomoredomains.club',
-//   'http://olgaliubar.nomoredomains.club',
-// ];
-
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     if (corsWhiteList.indexOf(origin) !== -1 || !origin) {
-//       callback(null, true);
-//     }
-//   },
-//   credentials: true,
-// };
-
-// const corsOptions = {
-//   origin: [
-//     "http://localhost:3000",
-//     "https://olgaliubar.nomoredomains.club",
-//     "http://olgaliubar.nomoredomains.club",
-//   ],
-//   methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
-//   preflightContinue: false,
-//   optionsSuccessStatus: 204,
-//   allowedHeaders: ["Content-Type", "origin"],
-//   credentials: true,
-// };
-// app.use("*", cors(corsOptions));
-
 app.use(requestLogger);
 app.use(limiter);
 
@@ -54,6 +24,7 @@ app.use(cookieParser());
 
 app.use(cors);
 app.use(router);
+// app.use(cors);
 app.use(errorLogger);
 
 app.use(errors());

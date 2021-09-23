@@ -6,7 +6,8 @@ module.exports = (req, res, next) => {
   const ALLOWED_CORS = process.env.ALLOWED_CORS ? process.env.ALLOWED_CORS.split(',') : [
   'https://olgaliubar.nomoredomains.club',
   'http://olgaliubar.nomoredomains.club',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://localhost:3001'
   ];
 
   if (ALLOWED_CORS.includes(origin)) {
