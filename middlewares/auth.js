@@ -17,12 +17,13 @@ module.exports = (req, res, next) => {
       token,
       NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
     );
-    console.log(payload)
+    console.log(payload);
   } catch (err) {
     throw new UnauthorizedError('Необходима авторизация.');
   }
 
   req.user = payload;
-
+  console.log(payload);
+  console.log(payload);
   return next();
 };
