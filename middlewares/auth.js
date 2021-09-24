@@ -6,7 +6,7 @@ const JWT_SECRET = '5f853b640758fb055b09e8c3bf492d5da66e4fe4a7a997717e5f893c5d7a
 
 module.exports = (req, res, next) => {
   const token = req.cookies.jwt;
-
+ console.log(token)
   if (!token) {
     throw new UnauthorizedError('Необходима авторизация.');
   }
@@ -17,6 +17,7 @@ module.exports = (req, res, next) => {
       token,
       NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
     );
+    console.log(payload)
   } catch (err) {
     throw new UnauthorizedError('Необходима авторизация.');
   }
