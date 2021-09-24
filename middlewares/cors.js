@@ -3,11 +3,14 @@ module.exports = (req, res, next) => {
   const requestHeaders = req.headers['access-control-request-headers'];
   const { origin } = req.headers;
   const DEFAULT_ALLOWED_METHODS = "GET,HEAD,PUT,PATCH,POST,DELETE";
-  const ALLOWED_CORS = process.env.ALLOWED_CORS ? process.env.ALLOWED_CORS.split(',') : [
-  'https://olgaliubar.nomoredomains.club',
-  'http://olgaliubar.nomoredomains.club',
+  // const ALLOWED_CORS = process.env.ALLOWED_CORS ? process.env.ALLOWED_CORS.split(',') :
+  const ALLOWED_CORS = [
   'http://localhost:3000',
-  'http://localhost:3001'
+  'http://localhost:3001',
+  'https://localhost:3000',
+  'https://localhost:3001',
+  'http://beatfilm-movies.xyz',
+  'https://beatfilm-movies.xyz'
   ];
 
   if (ALLOWED_CORS.includes(origin)) {
