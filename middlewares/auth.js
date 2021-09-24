@@ -5,9 +5,10 @@ const NODE_ENV = 'production'
 const JWT_SECRET = '5f853b640758fb055b09e8c3bf492d5da66e4fe4a7a997717e5f893c5d7ae517'
 
 module.exports = (req, res, next) => {
+  console.log("req.cookies.jwt", req.cookies.jwt);
+  console.log("req.cookies", req.cookies);
   const token = req.cookies.jwt;
   console.log("token", token);
-  console.log("req.cookies.jwt", req.cookies.jwt);
   if (!token) {
     throw new UnauthorizedError('Необходима авторизация.');
   }
