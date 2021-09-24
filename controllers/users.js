@@ -38,6 +38,8 @@ module.exports.login = (req, res, next) => {
         // token - наш JWT токен, который мы отправляем
           maxAge: 3600000,
           httpOnly: true,
+          sameSite: 'None',
+          secure: true,
         })
         .send({ message: 'Авторизация прошла успешно.' });
     })
