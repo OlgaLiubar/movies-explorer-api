@@ -11,7 +11,7 @@ const router = require("./routes");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const handleErrors = require("./errors/handleErrors");
 
-const { PORT, MONGO_URL } = require("./config");
+const { PORT, MONGO_URL } = process.env;
 
 const app = express();
 

@@ -44,8 +44,7 @@ module.exports.login = (req, res, next) => {
     .catch(() => {
       throw new UnauthorizedError(ERROR_MSG.UNAUTHORIZED);
     })
-    // .catch(next);
-    return next(err);
+    .catch(next);
 };
 
 module.exports.getUserInfo = (req, res, next) => {
