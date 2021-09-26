@@ -50,7 +50,7 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getUserInfo = (req, res, next) => {
-  User.findById(req.user._id)
+  return User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError(ERROR_MSG.NOT_FOUND_USER);
@@ -70,7 +70,7 @@ module.exports.getUserInfo = (req, res, next) => {
 module.exports.updateProfile = (req, res, next) => {
   const { name, email } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+  return User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
         throw new NotFoundError(ERROR_MSG.NOT_FOUND_USER);
